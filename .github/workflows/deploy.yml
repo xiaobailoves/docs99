@@ -9,15 +9,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v4 # 升级到 v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4 # 升级到 v4
         with:
-          node-version: 16
-      - run: npm i pnpm -g
-      - run: pnpm install --frozen-lockfile
+          node-version: 20 # 必须改为 20，解决 pnpm 报错
+
+      - name: Install pnpm
+        run: npm i pnpm -g
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm docs:build
+        run: pnpm docs:build # 确保 package.json 里的路径正确
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
